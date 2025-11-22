@@ -45,6 +45,42 @@
         background: var(--color-bg-control),
         border-color: var(--color-border-control),
       ),
+        control: (
+    normal: (
+      background: transparent,
+      color: var(--color-control-text, inherit),
+      border-color: transparent,
+    ),
+    hover: (
+      background: var(--color-control-hover-bg, rgba(255,255,255,0.03)),
+    ),
+    focus: (
+      background: var(--color-control-hover-bg, rgba(255,255,255,0.03)),
+      outline-color: transparent,
+    ),
+    active: (
+      background: var(--color-control-hover-bg, rgba(255,255,255,0.05)),
+    ),
+  ),
+
+  input: (
+    normal: (
+      background: var(--color-input-bg, var(--color-primary)),
+      color: var(--color-input-text, #fff),
+      border-color: transparent,
+    ),
+    hover: (
+      background: var(--color-input-bg-hover, color-mix(in srgb, var(--color-primary), white 10%)),
+    ),
+    focus: (
+      background: var(--color-input-bg-focused, color-mix(in srgb, var(--color-primary), white 20%)),
+      outline-color: transparent,
+    ),
+    active: (
+      background: var(--color-input-bg-active, color-mix(in srgb, var(--color-primary), black 10%)),
+    ),
+  ),
+
       hover: (
         background: var(--color-bg-control-hover),
         box-shadow: (
