@@ -8,6 +8,7 @@
   import { databasesStore } from '@mathesar/stores/databases';
   import { currentSchema } from '@mathesar/stores/schemas';
   import { Button, hasProperty } from '@mathesar-component-library';
+  import { parseColumnId } from '../../../utils/parseColumnId';
 
   import QueryManager from '../QueryManager';
   import type { QueryRunner } from '../QueryRunner';
@@ -21,7 +22,7 @@
     queryHandler instanceof QueryManager ? queryHandler : undefined;
   $: ({ query } = queryHandler);
 
-  function deleteMissingColumns(column_id: number) {
+  function deleteMissingColumns(column_id: unknown) {
     if (queryManager) {
       void queryManager.update((q) => q.withoutColumnsById([column_id]));
     }
@@ -35,11 +36,20 @@
       {#each errors.errors as apierror}
         <ul>
           {#if apierror.code === QUERY_CONTAINS_DELETED_COLUMN && hasProperty(apierror.detail, 'column_id')}
-            {@const columnId = Number(apierror.detail.column_id)}
-            <li class="error">
-              <p class="strong">
-                {$_('some_columns_in_query_missing')}
-              </p>
+    {#if parseColumnId(apierror.detail.column_id) !== null}
+    {const column_id = parseColumnId(apierror.detail.column_id)}
+    <li class="error">
+        <p class="strong">{_('some_columns_in_query_missing')}</p>
+        <p>Column {column_id}</p>
+    </li>
+{:else}
+    <li class="error">
+        <p class="strong">{_('some_columns_in_query_missing')}</p>
+        <p>Unknown column</p>
+    </li>
+{/if}
+
+
               {#if queryManager}
                 {@const columnsAndTransformsToDelete =
                   $query.getInitialColumnsAndTransformsUtilizingThemByColumnIds(
