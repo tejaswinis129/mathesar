@@ -7,6 +7,7 @@ import {
   readable,
   writable,
 } from 'svelte/store';
+import { parseColumnId } from '../../utils/parseColumnId';
 
 import { States } from '@mathesar/api/rest/utils/requestUtils';
 import type { RawColumnWithMetadata } from '@mathesar/api/rpc/columns';
@@ -57,7 +58,7 @@ function getSelectedCellData(
   const { rowId, columnId } = parseCellId(activeCellId);
   const row = selectableRowsMap.get(rowId);
   const value = row?.record[columnId];
-  const column = processedColumns.get(Number(columnId));
+  const parsedColumnId = parseColumnId(columnId); const column = parsedColumnId !== null ? processedColumns.get(parsedColumnId) : undefined;
   const recordSummary = defined(
     value,
     (v) => linkedRecordSummaries.get(columnId)?.get(String(v)),
